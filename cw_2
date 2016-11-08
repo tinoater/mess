@@ -3,31 +3,44 @@ DEBUG = True;
 def wholesums_recursive(numbers, n):
     if DEBUG:
         print("wholesums_recursive: " + str(numbers) + ", " + str(n))
+
+    # Create list of numbers left that can be used
     usable_numbers = [x for x in numbers if x <= n]
+
+    # If we have exactly zero then this is the end of the line for this combination
     if n == 0:
+        if DEBUG:
+            print("[[0]]")
         return [[0]]
+    # If non-zero and no usable numbers then this line will not work
     if len(usable_numbers) == 0:
+        if DEBUG:
+            print("None")
         return None
-    if len(usable_numbers) == 1:
-        return usable_numbers[0]
-    else:
-        sols = []
-        for each in usable_numbers:
-            list_of_sols = wholesums_recursive(usable_numbers, n-each)
-            if list_of_sols is not None:
-                for sol in list_of_sols:
-                    sol = sol.append(each)
-                sols = combine_solutions(sols, list_of_sols)
-        return sols
+    # if len(usable_numbers) == 1:
+    #     return usable_numbers[0]
+
+    # Define an empty solution at this level
+    sols = []
+    for each in usable_numbers:
+        list_of_sols = wholesums_recursive(usable_numbers, n-each)
+        if list_of_sols is not None:
+            for sol in list_of_sols:
+                sol = sol.append(each)
+            sols = combine_solutions(sols, list_of_sols)
+
+    if DEBUG:
+        print(str(sols))
+    return sols
 
 
 def combine_solutions(list1, list2):
     if list1 == []:
         return list2
     else:
-        # order each of my sub lists, then take set
-        pass
+        return list1 + list2# order each of my sub lists, then take set
+
 
 if __name__ == "__main__":
-    ans = wholesums_recursive([2,3], 2)
-    print(ans)
+    ans = wholesums_recursive([2,3], 5)
+    print("\n\n\n" + str(ans))
